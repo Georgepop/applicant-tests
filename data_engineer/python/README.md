@@ -20,6 +20,21 @@
 3. Результат вывести в stdout (например `print`).
 
 
+import requests
+import pandas as pd
+
+r = requests.get('http://jsonplaceholder.typicode.com/posts')
+r = r.json()
+r0= pd.DataFrame(r)
+
+r = requests.get('http://jsonplaceholder.typicode.com/comments')
+r = r.json()
+r01= pd.DataFrame(r)
+
+print(r01['postId'].value_counts())
+
+У всех постов - 5 комментов, начит среднее к      пользователям - 5 
+
 ### 2 (качество кода, Dependency Injection, Dependency Inversion)
 
 Код ниже работает без ошибок, но, возможно, требует определенного рефакторинга.
@@ -29,52 +44,33 @@
 from typing import Union
 
 
-class GlowLampSwitcher:
+class LampSwitcher():
 
-    def __init__(self) -> None:
+    def __init__(self, self.name = None):
         self.on_state = False
+        self.name  = name
 
-    def on(self) -> None:
-        print('Лампа накаливания включена...')
+    def turn_on(self) -> None:
+        print(f'{self.name} включена...')
         self.on_state = True
 
     def turn_off(self) -> None:
-        print('Лампа накаливания выключена...')
+        print(f'{self.name} выключена...')
         self.on_state = False
 
 
-class HalogenLampSwitcher:
-
-    def __init__(self) -> None:
-        self.on_state = False
-
-    def turn_on(self) -> None:
-        print('Галогенная лампа включена...')
-        self.on_state = True
-
-    def off(self) -> None:
-        print('Галогенная лампа выключена...')
-        self.on_state = False
+ = LampSwitcher(name = )
 
 
-class AnotherLampSwitcher:
-
-    def __init__(self) -> None:
-        self.on_state = False
-
-    def lamp_on(self) -> None:
-        print('Ещё лампа включена...')
-        self.on_state = True
-
-    def lamp_off(self) -> None:
-        print('Ещё лампа выключена...')
-        self.on_state = False
+class GlowLampSwitcher(LampSwitcher|('Лампа накаливания')):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class ElectricLightSwitchManager:
 
     def __init__(
-        self, switcher: Union[GlowLampSwitcher, HalogenLampSwitcher, AnotherLampSwitcher],
+        self, switcher: Union[LampSwitcher],
     ) -> None:
         self.switcher = switcher
 
@@ -137,18 +133,6 @@ class Order:
       for i in range(len(self.prices)):
          total += self.quantities[i] * self.prices[i]
       return total
-
-   def pay(self, payment_type, security_code):
-      if payment_type == 'debit':
-         print('Какая-то логика реализации debit...')
-         print(f'Верифицируем код: {security_code}')
-         self.status = 'paid'
-      elif payment_type == 'credit':
-         print('Какая-то логика реализации credit...')
-         print(f'Верифицируем код: {security_code}')
-         self.status = 'paid'
-      else:
-         raise Exception(f'Неизвестный тип платежа: {payment_type}')
 
 
 def main() -> None:
