@@ -58,7 +58,7 @@ select count (*) from items
 select country_name, count(distinct customer_id)
 from customer
 join countries using(country_code)
-where country_name in ('Италии','Франции')
+where country_name in ('France','Italy')
 group by country_name
 ```
 
